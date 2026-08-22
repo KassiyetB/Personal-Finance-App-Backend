@@ -1,16 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import express from "express";
-const app = express();
-
-// Middelware
-app.use(express.json());
-
-// Routes
-app.get("/", (req, res) => {
-    res.send("Hello World");
-});
+import app from './app.js';
 
 // Start server
 const PORT = process.env.PORT || 3000;
