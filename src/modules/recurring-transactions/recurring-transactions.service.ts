@@ -1,15 +1,5 @@
 import { prisma } from "#/lib/prisma.js";
-
-interface CreateRecurringTransactionInput {
-    userId: string;
-    categoryId: string;
-    type: "INCOME" | "EXPENSE";
-    name: string;
-    amount: number;
-    intervalMonths: number;
-    startDate: Date;
-    endDate?: Date;
-}
+import type { CreateRecurringTransactionInput } from "./recurring-transactions.schema.js"
 
 export async function createRecurringTransaction(
     data: CreateRecurringTransactionInput
