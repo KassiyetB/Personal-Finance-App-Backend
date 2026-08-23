@@ -127,3 +127,25 @@ export async function updateTransaction(
   });
 
 }
+
+export async function deleteTransaction(
+  id: string,
+  userId: string,
+) {
+  const transaction = await prisma.transaction.findFirst({
+    where: {
+      id,
+      userId,
+    },
+  });
+
+  if (!transaction) {
+    return null;
+  }
+
+  return prisma.transaction.delete({
+    where: {
+      id,
+    },
+  });
+}

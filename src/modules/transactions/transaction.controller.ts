@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { createTransaction, getTransactions, getTransactionById, updateTransaction } from "./transaction.service.js";
+import { createTransaction, getTransactions, getTransactionById, updateTransaction, deleteTransaction } from "./transaction.service.js";
 
 export async function createTransactionController(
     req: Request, 
@@ -73,7 +73,7 @@ export async function getTransactionByIdController(
     }
 }
 
-export async function updateTransactionsController(
+export async function updateTransactionController(
     req: Request,
     res: Response
 ) {
@@ -103,4 +103,41 @@ export async function updateTransactionsController(
             message: "Failed to update transaction",
         });
     }
+}
+
+export async function deleteTransactionController(
+    req: Request,
+    res: Response
+) {
+    try{
+        const id  = req.params.id as string;
+        const userId = req.query.userId as string;
+
+        if (!userId) {
+        return res.status(400).json({
+            message: "userId is required",
+        });
+        }
+
+        const transaction = await deleteTransaction(
+        id,
+        userId,
+        );
+
+        if (!transaction) {
+        return res.status(404).json({
+            message: "Transaction not found",
+        });
+        }
+
+        res.status(204).send();
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+        message: "Failed to delete transaction",
+        });
+    }
+    
+    
 }
