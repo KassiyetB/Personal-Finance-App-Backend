@@ -26,15 +26,35 @@ export async function createTransaction(
 }
 
 export async function getTransactions(
-  userId: string
+  userId: string,
+  month?: string
 ) {
+  let dateFilter = {};
+
+  if (month) {
+    const start = new Date(`${month}-01T00:00:00.000Z`);
+
+    const end = new Date(start);
+    end.setUTCMonth(end.getUTCMonth() + 1);
+
+    dateFilter = {
+      date: {
+        gte: start, // greater or equal
+        lt: end, // less than
+      },
+    };
+  }
+
   return prisma.transaction.findMany({
     where: {
       userId,
+      ...dateFilter,
     },
+
     orderBy: {
       date: "desc",
     },
+
     include: {
       category: true,
     },

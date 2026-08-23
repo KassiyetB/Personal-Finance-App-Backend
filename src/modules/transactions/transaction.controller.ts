@@ -23,14 +23,18 @@ export async function getTransactionsController(
 ) {
     try {
         const userId = req.query.userId as string;
+        const month = req.query.month as string | undefined;
         if (!userId) {
             return res.status(400).json({
                 message: "userId is required",
             });
         }
 
-        const transaction = await getTransactions(userId);
-        res.status(200).json(transaction);
+        const transactions = await getTransactions(
+            userId,
+            month
+        );
+        res.status(200).json(transactions);
     } catch (error) {
         console.error(error);
         res.status(500).json({
