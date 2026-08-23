@@ -60,3 +60,55 @@ export async function getTransactions(
     },
   });
 }
+
+interface UpdateTransactionInput {
+  type?: "INCOME" | "EXPENSE";
+  name?: string;
+  amount?: number;
+  date?: Date;
+  categoryId?: string;
+}
+
+export async function updateTransaction(
+  id: string,
+  userId: string,
+  data: UpdateTransactionInput
+) {
+  const existingTransaction = await prisma.transaction.findFirst({
+    where: {
+      id,
+      userId
+    },
+  });
+
+  if (!existingTransaction) {
+    return null;
+  }
+
+  return prisma.transaction.update({
+    where: {
+      id,
+    },
+    data: {
+      ...(data.type !== undefined && {
+        type: data.type,
+      }),
+      ...(data.name !== undefined && {
+        name: data.name,
+      }),
+      ...(data.amount !== undefined && {
+        amount: data.amount,
+      }),
+      ...(data.date !== undefined && {
+        date: data.date,
+      }),
+      ...(data.categoryId !== undefined && {
+        categoryId: data.categoryId,
+      }),
+    },
+    include: {
+      category: true,
+    },
+  });
+
+}
