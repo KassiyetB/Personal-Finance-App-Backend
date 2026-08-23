@@ -61,6 +61,21 @@ export async function getTransactions(
   });
 }
 
+export async function getTransactionById(
+  id: string,
+  userId: string,
+) {
+  return prisma.transaction.findFirst({
+    where: {
+      id,
+      userId,
+    },
+    include: {
+      category: true,
+    },
+  });
+}
+
 interface UpdateTransactionInput {
   type?: "INCOME" | "EXPENSE";
   name?: string;
