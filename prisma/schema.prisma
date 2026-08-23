@@ -69,6 +69,8 @@ model Transaction {
 
   recurringTransactionId String?
   recurringTransaction   RecurringTransaction? @relation(fields: [recurringTransactionId], references: [id])
+
+  @@unique([recurringTransactionId, date])
 }
 
 model RecurringTransaction {
