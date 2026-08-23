@@ -1,13 +1,6 @@
 import { prisma } from "#/lib/prisma.js";
+import type { CreateTransactionInput, UpdateTransactionInput } from "./transaction.schema.js";
 
-interface CreateTransactionInput {
-  userId: string;
-  categoryId: string;
-  type: "INCOME" | "EXPENSE";
-  name: string;
-  amount: number;
-  date: Date;
-}
 
 export async function createTransaction(
   data: CreateTransactionInput
@@ -74,14 +67,6 @@ export async function getTransactionById(
       category: true,
     },
   });
-}
-
-interface UpdateTransactionInput {
-  type?: "INCOME" | "EXPENSE";
-  name?: string;
-  amount?: number;
-  date?: Date;
-  categoryId?: string;
 }
 
 export async function updateTransaction(
