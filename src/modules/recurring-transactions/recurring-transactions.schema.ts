@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createRecurringTransactionSchema = z.object({
+export const createRecurringTransactionBodySchema = z.object({
     userId: z.uuid(),
 
     categoryId: z.uuid(),
@@ -31,4 +31,4 @@ export const createRecurringTransactionSchema = z.object({
 );
 
 export type CreateRecurringTransactionInput =
-    z.infer<typeof createRecurringTransactionSchema>;
+    z.infer<typeof createRecurringTransactionBodySchema>;
