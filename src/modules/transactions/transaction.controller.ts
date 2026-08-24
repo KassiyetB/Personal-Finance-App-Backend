@@ -7,28 +7,12 @@ import {
     deleteTransaction }
 from "./transaction.service.js";
 
-import {
-  createTransactionSchema,
-  updateTransactionSchema,
-  transactionIdSchema,
-  transactionQuerySchema,
-} from "./transaction.schema.js";
-import { pick } from "zod/mini";
-
 export async function createTransactionController(
     req: Request, 
     res: Response
 ) {
     try{
-        const result = createTransactionSchema.safeParse(req.body);
-
-        if (!result.success) {
-            return res.status(400).json({
-                message: "Invalid transaction data",
-                errors: result.error.issues,
-            });
-        }
-        const transaction = await createTransaction(result.data);
+        const transaction = await createTransaction(req.body);
         res.status(201).json(transaction);
     } catch (error) {
         console.error(error);
@@ -43,20 +27,10 @@ export async function getTransactionsController(
     res: Response
 ) {
     try {
-        const result = transactionQuerySchema.safeParse(req.query);
-
-        if (!result.success) {
-            return res.status(400).json({
-                message: "Invalid transaction query",
-                errors: result.error.issues,
-            });
-        }
-
-        const { userId, month } = result.data;
-
+        const { userId, month } = req.query;
         const transactions = await getTransactions(
-            userId,
-            month
+            userId as string,
+            month as string | undefined
         );
         res.status(200).json(transactions);
     } catch (error) {
@@ -72,31 +46,12 @@ export async function getTransactionByIdController(
     res: Response
 ) {
     try {
-        const idResult = transactionIdSchema.safeParse(req.params);
-
-        if (!idResult.success) {
-            return res.status(400).json({
-                message: "Invalid transaction ID",
-                errors: idResult.error.issues,
-            });
-        }
-
-        const queryResult = transactionQuerySchema
-            .pick({
-                userId: true,
-            })
-            .safeParse(req.query);
-
-        if (!queryResult.success) {
-            return res.status(400).json({
-                message: "Invalid userId",
-                errors: queryResult.error.issues,
-            });
-        }
+        const { id } = req.params;
+        const { userId } = req.query;
 
         const transaction = await getTransactionById(
-            idResult.data.id,
-            queryResult.data.userId,
+            id as string,
+            userId as string,
         )
         if (!transaction) {
             return res.status(404).json({
@@ -115,44 +70,15 @@ export async function updateTransactionController(
     req: Request,
     res: Response
 ) {
-    try{
-        const idResult = transactionIdSchema.safeParse(req.params);
+    try {
 
-        if (!idResult.success) {
-            return res.status(400).json({
-                message: "Invalid transaction ID",
-                errors: idResult.error.issues,
-            });
-        }
-
-        const queryResult = transactionQuerySchema
-            .pick({
-                userId: true,
-            })
-            .safeParse(req.query);
-
-        if (!queryResult.success) {
-            return res.status(400).json({
-                message: "Invalid userId",
-                errors: queryResult.error.issues,
-            });
-        }
-
-        const bodyResult = updateTransactionSchema.safeParse(
-            req.body,
-        );
-
-        if (!bodyResult.success) {
-            return res.status(400).json({
-                message: "Invalid transaction data",
-                errors: bodyResult.error.issues,
-            });
-        }
+        const { id } = req.params;
+        const { userId } = req.query;
 
         const transaction = await updateTransaction(
-            idResult.data.id,
-            queryResult.data.userId,
-            bodyResult.data
+            id as string,
+            userId as string,
+            req.body
         )
         if (!transaction) {
             return res.status(404).json({
@@ -172,31 +98,12 @@ export async function deleteTransactionController(
     res: Response
 ) {
     try{
-        const idResult = transactionIdSchema.safeParse(req.params);
-
-        if (!idResult.success) {
-            return res.status(400).json({
-                message: "Invalid transaction ID",
-                errors: idResult.error.issues,
-            });
-        }
-
-        const queryResult = transactionQuerySchema
-            .pick({
-                userId: true,
-            })
-            .safeParse(req.query);
-
-        if (!queryResult.success) {
-            return res.status(400).json({
-                message: "Invalid userId",
-                errors: queryResult.error.issues,
-            });
-        }
+        const { id } = req.params;
+        const { userId } = req.query;
 
         const transaction = await deleteTransaction(
-            idResult.data.id,
-            queryResult.data.userId,
+            id as string,
+            userId as string,
         );
 
         if (!transaction) {

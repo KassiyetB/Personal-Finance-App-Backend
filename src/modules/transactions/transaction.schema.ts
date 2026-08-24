@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createTransactionSchema = z.object({
+export const createTransactionBodySchema = z.object({
   userId: z.uuid(),
 
   categoryId: z.uuid(),
@@ -14,7 +14,7 @@ export const createTransactionSchema = z.object({
   date: z.coerce.date(),
 });
 
-export const updateTransactionSchema = z.object({
+export const updateTransactionBodySchema = z.object({
   categoryId: z.uuid().optional(),
 
   type: z.enum(["INCOME", "EXPENSE"]).optional(),
@@ -26,7 +26,7 @@ export const updateTransactionSchema = z.object({
   date: z.coerce.date().optional(),
 });
 
-export const transactionIdSchema = z.object({
+export const transactionParamsSchema = z.object({
   id: z.uuid(),
 });
 
@@ -39,10 +39,13 @@ export const transactionQuerySchema = z.object({
     .optional(),
 });
 
+export const transactionUserQuerySchema = z.object({
+  userId: z.uuid(),
+});
 
 
 export type CreateTransactionInput =
-    z.infer<typeof createTransactionSchema>;
+    z.infer<typeof createTransactionBodySchema>;
 
 export type UpdateTransactionInput =
-    z.infer<typeof updateTransactionSchema>;
+    z.infer<typeof updateTransactionBodySchema>;
