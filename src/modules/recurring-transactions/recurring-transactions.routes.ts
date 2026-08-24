@@ -2,14 +2,16 @@ import { Router } from "express";
 import { 
     createRecurringTransactionController,
     getRecurringTransactionsController,
-    getRecurringTransactionByIdController 
+    getRecurringTransactionByIdController,
+    updateRecurringTransactionController 
 } from "./recurring-transactions.controller.js";
 
 
 import { userQuerySchema, idParamsSchema } from "#/schema/common.schema.js";
 
 import { 
-    createRecurringTransactionBodySchema
+    createRecurringTransactionBodySchema,
+    updateRecurringTransactionBodySchema
 } from "./recurring-transactions.schema.js";
 
 import { validate } from "#/middleware/validate.js";
@@ -22,18 +24,28 @@ router.post(
     validate("body", createRecurringTransactionBodySchema), 
     createRecurringTransactionController
 );
+
 router.get(
     "/", 
     validate("query", userQuerySchema),
     getRecurringTransactionsController
 );
+
 router.get(
     "/:id", 
     validate("params", idParamsSchema),
     validate("query", userQuerySchema),
     getRecurringTransactionByIdController
 );
-// router.patch("/:id", );
-// router.delete("/:id", );
+
+router.patch(
+    "/:id",
+    validate("params", idParamsSchema),
+    validate("query", userQuerySchema),
+    validate("body", updateRecurringTransactionBodySchema),
+    updateRecurringTransactionController
+
+     
+);
 
 export default router;

@@ -1,5 +1,5 @@
 import { prisma } from "#/lib/prisma.js";
-import type { CreateRecurringTransactionInput } from "./recurring-transactions.schema.js"
+import type { CreateRecurringTransactionInput, UpdateRecurringTransactionInput } from "./recurring-transactions.schema.js"
 
 export async function createRecurringTransaction(
     data: CreateRecurringTransactionInput
@@ -49,4 +49,77 @@ export async function getRecurringTransactionById(
             category: true
         }
     })
+}
+
+export async function updateRecurringTransaction(
+    id: string,
+    userId: string,
+    data: UpdateRecurringTransactionInput
+) {
+    const existingRecurringTransaction =
+    await prisma.recurringTransaction.findFirst({
+      where: {
+        id,
+        userId,
+      },
+    });
+
+    if (!existingRecurringTransaction) {
+        return null;
+    }
+
+    const startDate =
+        data.startDate ?? existingRecurringTransaction.startDate;
+
+    const endDate =
+        data.endDate ?? existingRecurringTransaction.endDate;
+
+    if (endDate && endDate < startDate) {
+        throw new Error(
+        "endDate must be after startDate",
+        );
+    }
+
+    return prisma.recurringTransaction.update({
+        where: {
+        id,
+        },
+        data: {
+        ...(data.categoryId !== undefined && {
+            categoryId: data.categoryId,
+        }),
+
+        ...(data.type !== undefined && {
+            type: data.type,
+        }),
+
+        ...(data.name !== undefined && {
+            name: data.name,
+        }),
+
+        ...(data.amount !== undefined && {
+            amount: data.amount,
+        }),
+
+        ...(data.intervalMonths !== undefined && {
+            intervalMonths: data.intervalMonths,
+        }),
+
+        ...(data.startDate !== undefined && {
+            startDate: data.startDate,
+        }),
+
+        ...(data.endDate !== undefined && {
+            endDate: data.endDate,
+        }),
+
+        ...(data.active !== undefined && {
+            active: data.active,
+        }),
+        },
+
+        include: {
+        category: true,
+        },
+    });
 }
