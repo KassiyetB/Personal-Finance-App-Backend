@@ -8,12 +8,12 @@ import {
     deleteTransactionController 
 } from "./transaction.controller.js";
 
+import { userQuerySchema, idParamsSchema } from "#/schema/common.schema.js";
+
 import {
   createTransactionBodySchema,
   updateTransactionBodySchema,
-  transactionParamsSchema,
   transactionQuerySchema,
-  transactionUserQuerySchema
 } from "./transaction.schema.js";
 
 import { validate } from "#/middleware/validate.js";
@@ -34,23 +34,23 @@ router.get(
 
 router.get(
     "/:id", 
-    validate("params", transactionParamsSchema),
-    validate("query", transactionUserQuerySchema),     
+    validate("params", idParamsSchema),
+    validate("query", userQuerySchema),     
     getTransactionByIdController
 );
 
 router.patch(
     "/:id",
-    validate("params", transactionParamsSchema),
-    validate("query", transactionUserQuerySchema),
+    validate("params", idParamsSchema),
+    validate("query", userQuerySchema),
     validate("body", updateTransactionBodySchema),
     updateTransactionController
 );
 
 router.delete(
     "/:id",
-    validate("params", transactionParamsSchema),
-    validate("query", transactionUserQuerySchema),
+    validate("params", idParamsSchema),
+    validate("query", userQuerySchema),
     deleteTransactionController
 );
 

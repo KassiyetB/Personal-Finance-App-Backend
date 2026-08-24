@@ -19,3 +19,19 @@ export async function createRecurringTransaction(
         },
     });
 }
+
+export async function getRecurringTransactions(
+    userId: string,
+) {
+    return prisma.recurringTransaction.findMany({
+        where:{
+            userId
+        },
+        include:{
+            category: true
+        },
+        orderBy: {
+            startDate: "asc"
+        }
+    })
+}

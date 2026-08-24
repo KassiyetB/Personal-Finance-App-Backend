@@ -26,10 +26,6 @@ export const updateTransactionBodySchema = z.object({
   date: z.coerce.date().optional(),
 });
 
-export const transactionParamsSchema = z.object({
-  id: z.uuid(),
-});
-
 export const transactionQuerySchema = z.object({
   userId: z.uuid(),
 
@@ -38,11 +34,6 @@ export const transactionQuerySchema = z.object({
     .regex(/^\d{4}-(0[1-9]|1[0-2])$/)
     .optional(),
 });
-
-export const transactionUserQuerySchema = z.object({
-  userId: z.uuid(),
-});
-
 
 export type CreateTransactionInput =
     z.infer<typeof createTransactionBodySchema>;
