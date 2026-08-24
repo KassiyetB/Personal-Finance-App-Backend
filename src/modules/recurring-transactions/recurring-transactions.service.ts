@@ -35,3 +35,18 @@ export async function getRecurringTransactions(
         }
     })
 }
+
+export async function getRecurringTransactionById(
+    id: string,
+    userId: string    
+) {
+    return prisma.recurringTransaction.findFirst({
+        where:{
+            id,
+            userId
+        },
+        include:{
+            category: true
+        }
+    })
+}

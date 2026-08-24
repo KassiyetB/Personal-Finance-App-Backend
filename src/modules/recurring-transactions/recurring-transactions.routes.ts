@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { 
     createRecurringTransactionController,
-    getRecurringTransactionsController 
+    getRecurringTransactionsController,
+    getRecurringTransactionByIdController 
 } from "./recurring-transactions.controller.js";
 
 
@@ -26,7 +27,12 @@ router.get(
     validate("query", userQuerySchema),
     getRecurringTransactionsController
 );
-// router.get("/:id", );
+router.get(
+    "/:id", 
+    validate("params", idParamsSchema),
+    validate("query", userQuerySchema),
+    getRecurringTransactionByIdController
+);
 // router.patch("/:id", );
 // router.delete("/:id", );
 
