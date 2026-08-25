@@ -7,6 +7,9 @@ import {
     deleteTransaction }
 from "./transaction.service.js";
 
+import { generateTransactionsForMonth } from "./transaction.generator.js";
+import { parse } from "node:path";
+
 export async function createTransactionController(
     req: Request, 
     res: Response
@@ -28,9 +31,22 @@ export async function getTransactionsController(
 ) {
     try {
         const { userId, month } = req.query;
+
+        const parsedMonth = month as string | undefined;
+
+        if(parsedMonth){
+            const[year, monthNumber] = parsedMonth.split("-").map(Number);
+
+            await generateTransactionsForMonth(
+                userId as string,
+                year as number,
+                monthNumber as number
+            )
+        }
+
         const transactions = await getTransactions(
             userId as string,
-            month as string | undefined
+            parsedMonth
         );
         res.status(200).json(transactions);
     } catch (error) {
