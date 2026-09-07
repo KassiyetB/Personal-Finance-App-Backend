@@ -8,7 +8,6 @@ import {
 from "./transaction.service.js";
 
 import { generateTransactionsForMonth } from "./transaction.generator.js";
-import { parse } from "node:path";
 
 export async function createTransactionController(
     req: Request, 
