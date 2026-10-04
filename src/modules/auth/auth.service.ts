@@ -1,6 +1,6 @@
 import { prisma } from "#/lib/prisma.js";
 import bcrypt from "bcrypt";
-import type { CreateUserInput } from "./user.schema.js";
+import type { CreateUserInput } from "./auth.schema.js";
 
 export async function createUser(
     userData: CreateUserInput

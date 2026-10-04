@@ -1,5 +1,5 @@
 import type {Request, Response} from 'express';
-import {createUser} from './user.service.js';
+import {createUser} from './auth.service.js';
 
 export async function createUserController(
     req: Request,
